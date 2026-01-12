@@ -15,10 +15,4 @@ on:
 
 jobs:
   pr-open:
-    uses: DOP2025-01/pipeline-cicd-centralized/.github/workflows/pr-open-workflows.yml@main
-    with:
-      java-version: "17"
-      maven-version: "3.8.8"
-      project-name: "quickbite"
-      service-name: "logic"
-      image-tag: "v1.0.0"
+    uses: hoangvankhoa205/centralized-ci/.github/workflows/pr-open-workflow.yml@main
