@@ -1,0 +1,27 @@
+name: PR merged for Java Application
+run-name: ${{ github.actor }} runned this pipeline
+
+
+# PR merged/closed (một đoạn source code valid verified) -> pipeline
+on:
+  pull_request:
+    paths-ignore:
+      - '.infra/**' # Ignores changes inside .infra/**
+      - '**/*iac-*'
+    branches:
+      - main
+      - master
+    types: [closed]
+    
+jobs:
+  pr-merged:
+    uses: DOP2025-01/pipeline-cicd-centralized/.github/workflows/pr-merged-workflows.yml@main
+    with:
+      java-version: "17"
+      maven-version: "3.8.8"
+      project-name: "quickbite"
+      service-name: "logic"
+      image-tag: "v1.0.0"
+    secrets: # Use 'secrets', not 'with'
+      DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}

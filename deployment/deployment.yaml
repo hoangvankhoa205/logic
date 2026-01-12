@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quickbite-lg
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: quickbite
+      env: dev
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: quickbite
+        env: dev
+    spec:
+      imagePullSecrets:
+        - name: quickbite-app
+      containers:
+      - name: quickbite-lg
+        image: 846040891095.dkr.ecr.ca-central-1.amazonaws.com/quickbite/logic:latest
+        ports:
+        - containerPort: 8081
+        volumeMounts:
+        - name: secret-volume
+          mountPath: "/etc/secret"
+          readOnly: true
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: quickbite-lg-sc

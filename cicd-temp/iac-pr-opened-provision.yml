@@ -1,0 +1,60 @@
+name: PR Open for Terrafrom Provision
+run-name: ${{ github.actor }} runned this pipeline
+
+# PR Open (một developer tạo pull request -> muốn nộp bài) -> pipeline
+on:
+  pull_request:
+    paths:
+      - '.infra/**'
+      - '**/*iac-*'
+    branches:
+      - main
+      - master
+    types: [opened, synchronize]
+
+jobs:
+  iac-logic-cicd-pipeline:
+    runs-on: quickbite
+    steps:
+      - name: Clone source code
+        uses: actions/checkout@v5
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x' # Specifies the desired Node.js version
+      # - name: Install dependencies & tools
+      #   run: |
+      #     sudo apt-get update --no-install-recommends -y
+      #     sudo apt-get install unzip -y
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1 # Replace with your desired AWS region
+      # - name: Terraform fmt check
+      #   id: fmt
+      #   run: |
+      #     cd .infra
+      #     terraform fmt -check
+
+      - name: Terraform Init
+        run: |
+          cd .infra
+          terraform init
+
+      - name: Validate TF
+        run: |
+          cd .infra
+          terraform validate
+
+      - name: Planning Terraform
+        run: |
+          cd .infra
+          terraform plan
+
+
+          

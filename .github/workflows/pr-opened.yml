@@ -1,0 +1,24 @@
+name: PR Open for Java Application
+run-name: ${{ github.actor }} runned this pipeline
+
+# PR Open (một developer tạo pull request -> muốn nộp bài) -> pipeline
+on:
+  pull_request:
+    paths-ignore:
+      - '.infra/**' # Ignores changes inside .infra/**
+      - '**/*iac-*'
+    branches:
+      - main
+      - master
+      - feature
+    types: [opened, synchronize]
+
+jobs:
+  pr-open:
+    uses: DOP2025-01/pipeline-cicd-centralized/.github/workflows/pr-open-workflows.yml@main
+    with:
+      java-version: "17"
+      maven-version: "3.8.8"
+      project-name: "quickbite"
+      service-name: "logic"
+      image-tag: "v1.0.0"
