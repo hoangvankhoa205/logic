@@ -16,4 +16,5 @@ on:
 jobs:
   pr-open:
     uses: hoangvankhoa205/centralized-ci/.github/workflows/pr-open-workflow.yml@main
+
     
